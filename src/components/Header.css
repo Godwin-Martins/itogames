@@ -1,0 +1,125 @@
+.it-header {
+    background-color: #161b22;
+    border-bottom: 1px solid #30363d;
+    padding: 0.5rem 1rem;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    color: #f0f6fc;
+}
+
+.header-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.logo h1 {
+    font-size: 1.5rem;
+    font-weight: 800;
+    letter-spacing: -1px;
+    cursor: pointer;
+}
+
+.logo span {
+    color: #00ff88; /* Neon Green Accent */
+}
+
+/* Search Bar (Desktop) */
+.search-bar {
+    display: flex;
+    align-items: center;
+    background: #0d1117;
+    padding: 0.4rem 1rem;
+    border-radius: 20px;
+    border: 1px solid #30363d;
+    width: 40%;
+}
+
+.search-icon { color: #8b949e; margin-right: 8px; }
+.search-bar input { background: transparent; border: none; color: white; outline: none; width: 100%; }
+
+/* Desktop Nav Items */
+.desktop-nav { display: flex; gap: 1.5rem; align-items: center; }
+
+.nav-item {
+    background: none;
+    border: none;
+    color: #8b949e;
+    font-size: 1.3rem;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.nav-item:hover { color: #00ff88; }
+
+.login-btn {
+    border: 1px solid #00ff88;
+    color: #00ff88;
+    padding: 6px 15px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    background: transparent;
+    cursor: pointer;
+}
+
+.profile-btn {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 1rem;
+    background: #21262d;
+    padding: 5px 12px;
+    border-radius: 6px;
+    color: white;
+}
+
+/* MOBILE FOOTER NAV STYLES */
+.mobile-footer-nav {
+    display: none; /* Hidden on Desktop */
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: #161b22;
+    border-top: 1px solid #30363d;
+    justify-content: space-around;
+    padding: 10px 0;
+    z-index: 2000;
+}
+
+.footer-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #8b949e;
+    text-decoration: none;
+    font-size: 1.2rem;
+    gap: 4px;
+}
+
+.footer-item span {
+    font-size: 0.65rem;
+    font-weight: 500;
+}
+
+.footer-item.active { color: #00ff88; }
+
+.sign-in-special { color: #58a6ff; }
+
+.mobile-search-trigger { display: none; color: #8b949e; font-size: 1.2rem; }
+
+/* MEDIA QUERIES */
+@media (max-width: 768px) {
+    .search-bar, .desktop-nav { display: none; }
+
+    .mobile-footer-nav { display: flex; }
+
+    .mobile-search-trigger { display: block; }
+
+    /* Adjust main content so it doesn't get hidden behind the footer */
+    body { padding-bottom: 70px; }
+}

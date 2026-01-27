@@ -1,42 +1,151 @@
-#root {
-  max-width: 1280px;
+/* Root Settings */
+:root {
+  --bg-dark: #0d1117;
+  --surface-dark: #161b22;
+  --border-color: #30363d;
+  --neon-accent: #00ff88;
+  --text-main: #c9d1d9;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--bg-dark);
+  color: var(--text-main);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.main-content {
+  max-width: 1100px;
   margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+  padding: 1rem;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+/* Highlights Section spacing */
+.highlights-section {
+  margin-bottom: 1.5rem;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
+/* Main Layout Grid */
+.main-layout {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 20px;
+  /* align-items: start is necessary for sticky to work correctly */
+  align-items: start; 
+}
+
+/* Sticky Sidebar Logic */
+.sidebar-area {
+  position: sticky;
+  top: 80px; /* Adjust this to match your Header height */
+  height: fit-content;
+}
+
+/* Temporary Placeholders */
+.ui-placeholder {
+  background: var(--surface-dark);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #8b949e;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Sidebar Widgets */
+.sidebar-widget {
+    background: var(--surface-dark);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.sidebar-widget h3 {
+    font-size: 1rem;
+    margin-bottom: 15px;
+    color: var(--neon-accent);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.tournament-card {
+    background: var(--bg-dark);
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.tournament-card p {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.tournament-card span {
+    display: block;
+    font-size: 0.8rem;
+    color: #8b949e;
+    margin-bottom: 10px;
+}
+
+.join-btn {
+    background: var(--neon-accent);
+    color: black;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    width: 100%;
+    transition: 0.3s;
+}
+
+.join-btn:hover {
+    transform: scale(1.02);
+    box-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
+}
+
+.community-list {
+    list-style: none;
+}
+
+.community-list li {
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border-color);
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: 0.2s;
+}
+
+.community-list li:hover {
+    color: var(--neon-accent);
+    padding-left: 5px;
+}
+
+.community-list li:last-child {
+    border-bottom: none;
+}
+
+/* Responsive adjustments */
+@media (max-width: 850px) {
+  .main-layout {
+    grid-template-columns: 1fr;
   }
-  to {
-    transform: rotate(360deg);
+  
+  .sidebar-area {
+    display: none; /* Hide sidebar on mobile to prioritize the feed */
   }
-}
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
+  .highlights-section {
+    margin-bottom: 1rem;
   }
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
 }

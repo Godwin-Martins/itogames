@@ -1,35 +1,57 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React from 'react';
+import './App.css';
+import Header from './components/Header';
+import Highlights from './components/Highlights';
+import Feed from './components/Feed';
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div className="itogames-app">
+      {/* 1. Top Navigation */}
+      <Header />
+
+      <main className="main-content">
+        
+        {/* 2. Horizontal Story Bar (2min Clips) */}
+        <section className="highlights-section">
+           <Highlights />
+        </section>
+
+        {/* 3. Main Content Layout */}
+        <div className="main-layout">
+          
+          {/* Left Side: The Scrolling Feed */}
+          <div className="feed-area">
+            <Feed />
+          </div>
+
+          {/* Right Side: Tournaments & Communities Sidebar */}
+          <aside className="sidebar-area">
+            {/* We'll build this component next */}
+            <div className="sidebar-widget">
+                <h3>Ongoing Tournaments</h3>
+                <div className="tournament-card">
+                    <p>eFootball Weekly Cup</p>
+                    <span>Entry: $2.00</span>
+                    <button className="join-btn">Join Now</button>
+                </div>
+            </div>
+
+            <div className="sidebar-widget">
+                <h3>Top Communities</h3>
+                <ul className="community-list">
+                    <li>#CODM</li>
+                    <li>#FCMobile</li>
+                    <li>#FreeFire</li>
+                    <li>#PUBGM</li>
+                </ul>
+            </div>
+          </aside>
+
+        </div>
+      </main>
+    </div>
+  );
 }
 
-export default App
+export default App;
