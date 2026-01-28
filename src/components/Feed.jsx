@@ -12,7 +12,7 @@ const Feed = () => {
             gameID: "558299103",
             caption: "New world record in CODM? Check this out! #SniperKing",
             type: "image",
-            mediaUrl: "https://placehold.co/600x400/161b22/00ff88?text=Gaming+Screenshot",
+            mediaUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSZiQO_8lDmfbHgB_gsDeBXi8XI8HYXH8nD9g&s",
             likes: 124,
             comments: 45,
             community: "CODM"

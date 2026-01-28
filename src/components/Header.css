@@ -123,3 +123,37 @@
     /* Adjust main content so it doesn't get hidden behind the footer */
     body { padding-bottom: 70px; }
 }
+/* Highlight the active icon in the header and footer */
+.nav-item.active, 
+.footer-item.active {
+    color: #00ff88 !important;
+}
+
+/* Ensure footer items behave like buttons */
+.footer-item {
+    cursor: pointer;
+}
+
+.logo-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Ensure mobile search is visible on small screens */
+@media (max-width: 768px) {
+    .search-bar, .desktop-nav { display: none; }
+    .mobile-footer-nav { display: flex; }
+    .mobile-search-trigger { 
+        display: block; 
+        font-size: 1.2rem;
+        color: #8b949e;
+        cursor: pointer;
+    }
+    body { padding-bottom: 70px; }
+}
+
+/* Restoring active states */
+.nav-item.active, 
+.footer-item.active {
+    color: #00ff88 !important;
+}

@@ -1,0 +1,132 @@
+.community-page-container {
+    padding: 20px 0;
+    color: #f0f6fc;
+}
+
+.community-header {
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.community-header h2 {
+    font-size: 1.8rem;
+    color: #00ff88;
+}
+
+/* Communities Grid */
+.communities-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 20px;
+}
+
+.community-card {
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 15px;
+    padding: 30px 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.community-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--hover-color);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.game-icon {
+    font-size: 3rem;
+    margin-bottom: 10px;
+}
+
+/* Groups View */
+.groups-view {
+    animation: fadeIn 0.3s ease;
+}
+
+.back-btn {
+    background: none;
+    border: none;
+    color: #8b949e;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.back-btn:hover { color: #f0f6fc; }
+
+.group-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #30363d;
+    padding-bottom: 15px;
+}
+
+.create-group-btn {
+    background: #21262d;
+    border: 1px solid #30363d;
+    color: #00ff88;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+}
+
+.groups-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.group-item {
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 12px;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.group-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.group-icon-img {
+    font-size: 1.5rem;
+    color: #8b949e;
+}
+
+.group-info h4 { margin: 0; font-size: 1.1rem; }
+.group-info p { margin: 0; font-size: 0.8rem; color: #8b949e; }
+
+.join-group-link {
+    background: #00ff88;
+    color: #0d1117;
+    border: none;
+    padding: 6px 15px;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 600px) {
+    .communities-grid { grid-template-columns: repeat(2, 1fr); }
+    .group-header { flex-direction: column; align-items: flex-start; gap: 10px; }
+}
