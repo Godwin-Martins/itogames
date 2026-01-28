@@ -71,7 +71,10 @@ const Header = () => {
                             <FaUsers />
                         </NavLink>
 
-                        <button className="nav-item"><FaEnvelope /></button>
+                        <button className="nav-item" onClick={() => {
+                            if (!auth.currentUser) return navigate('/login');
+                            navigate('/messages');
+                        }}><FaEnvelope /></button>
                         <button className="nav-item"><FaTrophy /></button>
                         
                         {!loading && (
@@ -105,7 +108,10 @@ const Header = () => {
                     <FaUsers />
                     <span>Clubs</span>
                 </NavLink>
-                <div className="footer-item"><FaEnvelope /><span>Chat</span></div>
+                <div className="footer-item" onClick={() => {
+                    if (!auth.currentUser) return navigate('/login');
+                    navigate('/messages');
+                }}><FaEnvelope /><span>Chat</span></div>
                 <div className="footer-item"><FaTrophy /><span>Tours</span></div>
                 {!loading && (
                     user ? (

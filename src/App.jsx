@@ -9,6 +9,7 @@ import Auth from './pages/Auth';
 import Profile from './pages/Profile';
 import SearchResults from './pages/SearchResults';
 import UserProfile from './pages/UserProfile';
+import Message from './pages/Message';
 
 function App() {
   return (
@@ -77,6 +78,10 @@ function App() {
 
             {/* Public user profile route */}
             <Route path="/user/:id" element={<UserProfile />} />
+
+            {/* Messages (inbox + chat) */}
+            <Route path="/messages" element={<Message />} />
+            <Route path="/messages/:id" element={<Message />} />
 
             {/* Catch-all: Redirect invalid URLs back to Home */}
             <Route path="*" element={<Navigate to="/" />} />
