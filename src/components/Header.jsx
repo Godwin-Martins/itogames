@@ -46,7 +46,8 @@ const Header = () => {
                     {/* Logo - Text decoration removed via CSS logo-link class */}
                     <Link to="/" className="logo-link">
                         <div className="logo">
-                            <h1>iTo<span>games</span></h1>
+                            <img src="/logo.png" alt="itodux logo" className="logo-img" />
+                            <h1>ito<span>dux</span></h1>
                         </div>
                     </Link>
 

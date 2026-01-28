@@ -92,7 +92,7 @@ const Auth = () => {
                 age: formData.age,
                 communities: formData.communities,
                 followersCount: 0,
-                gameTag: `${formData.username.trim()}#iTo`,
+                gameTag: `${formData.username.trim()}#itodux`,
                 createdAt: new Date(),
                 setupComplete: true
             };
@@ -116,7 +116,7 @@ const Auth = () => {
             {/* Initial Login Screen */}
             {!showSetupModal && !showSuccessModal && (
                 <div className="auth-card">
-                    <h1>iTo<span>games</span></h1>
+                    <h1>ito<span>dux</span></h1>
                     <h2>Gamer Entrance</h2>
                     <p>Sign in with Google to start your journey.</p>
                     <button className="google-btn" onClick={handleGoogleSignIn} disabled={loading}>
@@ -184,7 +184,7 @@ const Auth = () => {
                     <div className="success-modal">
                         <FaCheckCircle className="success-icon" />
                         <h2>Profile Ready!</h2>
-                        <p>Welcome to iTogames, {formData.username}.</p>
+                        <p>Welcome to itodux, {formData.username}.</p>
                         <button onClick={() => navigate('/profile')} className="continue-btn">
                             Enter Profile
                         </button>

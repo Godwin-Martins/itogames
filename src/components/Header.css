@@ -21,6 +21,18 @@
     font-weight: 800;
     letter-spacing: -1px;
     cursor: pointer;
+    margin: 0;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 0;
+}
+
+.logo-img {
+    height: 40px;
+    width: auto;
 }
 
 .logo span {

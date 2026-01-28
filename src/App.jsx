@@ -14,7 +14,7 @@ import Message from './pages/Message';
 function App() {
   return (
     <Router>
-      <div className="itogames-app">
+      <div className="itodux-app">
         {/* Navigation Header */}
         <Header />
 
