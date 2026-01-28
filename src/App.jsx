@@ -8,6 +8,7 @@ import CommunityPage from './pages/CommunityPage';
 import Auth from './pages/Auth';
 import Profile from './pages/Profile';
 import SearchResults from './pages/SearchResults';
+import UserProfile from './pages/UserProfile';
 
 function App() {
   return (
@@ -73,6 +74,9 @@ function App() {
             {/* Auth Routes */}
             <Route path="/login" element={<Auth />} />
             <Route path="/profile" element={<Profile />} />
+
+            {/* Public user profile route */}
+            <Route path="/user/:id" element={<UserProfile />} />
 
             {/* Catch-all: Redirect invalid URLs back to Home */}
             <Route path="*" element={<Navigate to="/" />} />

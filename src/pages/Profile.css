@@ -158,3 +158,49 @@
     .profile-info-main { flex-direction: column; }
     .profile-stats { text-align: center; width: 100%; }
 }
+
+.profile-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.follow-btn, .message-btn {
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+    transition: 0.3s;
+}
+
+.follow-btn {
+    background: var(--neon-accent);
+    border: none;
+    color: #000;
+}
+
+.follow-btn.following {
+    background: transparent;
+    border: 1px solid var(--border-color);
+    color: #8b949e;
+}
+
+.message-btn {
+    background: #21262d;
+    border: 1px solid var(--border-color);
+    color: white;
+}
+
+.follow-btn:hover, .message-btn:hover {
+    transform: translateY(-2px);
+    opacity: 0.9;
+}
+
+.follow-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
