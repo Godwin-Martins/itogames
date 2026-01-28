@@ -3,6 +3,7 @@ import { useSearchParams, useNavigate } from 'react-router-dom';
 import { db } from '../firebase';
 import { collection, getDocs } from 'firebase/firestore';
 import { FaSearch, FaArrowLeft } from 'react-icons/fa';
+import { getGameLogo } from '../utils/gameLogos';
 import './SearchResults.css';
 
 const SearchResults = () => {
@@ -122,9 +123,9 @@ const SearchResults = () => {
                                     {user.communities && user.communities.length > 0 && (
                                         <div className="user-communities">
                                             {user.communities.slice(0, 2).map((game) => (
-                                                <span key={game} className="community-tag">
-                                                    {game}
-                                                </span>
+                                                <div key={game} className="community-logo-wrapper">
+                                                    <img src={getGameLogo(game)} alt={game} className="community-logo" title={game} />
+                                                </div>
                                             ))}
                                             {user.communities.length > 2 && (
                                                 <span className="community-tag">

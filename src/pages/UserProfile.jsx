@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { db, auth } from '../firebase';
 import { doc, getDoc, updateDoc, increment } from 'firebase/firestore';
 import { FaUserCircle, FaTrophy, FaImages, FaThList, FaUserPlus, FaEnvelope, FaCheck } from 'react-icons/fa';
+import { getGameLogo } from '../utils/gameLogos';
 import './Profile.css';
 
 const UserProfile = () => {
@@ -119,7 +120,9 @@ const UserProfile = () => {
             {userData.communities && (
                 <div className="profile-communities">
                     {userData.communities.map((game) => (
-                        <span key={game} className="community-badge">#{game}</span>
+                        <div key={game} className="community-logo-wrapper" title={game}>
+                            <img src={getGameLogo(game)} alt={game} className="community-logo" />
+                        </div>
                     ))}
                 </div>
             )}

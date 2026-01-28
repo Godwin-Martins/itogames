@@ -41,6 +41,15 @@
     margin-bottom: 10px;
 }
 
+.game-logo {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin: 0 auto 10px;
+    display: block;
+}
+
 /* Groups View */
 .groups-view {
     animation: fadeIn 0.3s ease;

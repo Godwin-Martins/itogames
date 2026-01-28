@@ -1,18 +1,19 @@
 import React, { useState } from 'react';
 import './CommunityPage.css';
 import { FaUsers, FaPlus, FaChevronLeft } from 'react-icons/fa';
+import { getGameLogo } from '../utils/gameLogos';
 
 const CommunityPage = () => {
     const [selectedCommunity, setSelectedCommunity] = useState(null);
 
     // List of visible communities as agreed
     const communities = [
-        { id: 'pubgm', name: 'PUBGM', icon: '🔫', color: '#ffcc00' },
-        { id: 'codm', name: 'CODM', icon: '🎖️', color: '#58a6ff' },
-        { id: 'efootball', name: 'eFootball', icon: '⚽', color: '#00ff88' },
-        { id: 'fcmobile', name: 'FC Mobile', icon: '🎮', color: '#aa00ff' },
-        { id: 'dls', name: 'DLS', icon: '🏆', color: '#ff4444' },
-        { id: 'freefire', name: 'Free Fire', icon: '🔥', color: '#ffa500' }
+        { id: 'pubgm', name: 'PUBGM', color: '#ffcc00' },
+        { id: 'codm', name: 'CODM', color: '#58a6ff' },
+        { id: 'efootball', name: 'eFootball', color: '#00ff88' },
+        { id: 'fcmobile', name: 'FC Mobile', color: '#aa00ff' },
+        { id: 'dls', name: 'DLS', color: '#ff4444' },
+        { id: 'freefire', name: 'Free Fire', color: '#ffa500' }
     ];
 
     // Dummy groups for when a community is clicked
@@ -41,7 +42,7 @@ const CommunityPage = () => {
                                 onClick={() => setSelectedCommunity(game)}
                                 style={{ '--hover-color': game.color }}
                             >
-                                <div className="game-icon">{game.icon}</div>
+                                <img src={getGameLogo(game.name)} alt={game.name} className="game-logo" />
                                 <h3>{game.name}</h3>
                             </div>
                         ))}

@@ -177,6 +177,20 @@
     gap: 8px;
 }
 
+.community-logo-wrapper {
+    width: 32px;
+    height: 32px;
+    border-radius: 4px;
+    overflow: hidden;
+    border: 1px solid #30363d;
+}
+
+.community-logo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
 .community-tag {
     background: #1c2128;
     color: #58a6ff;
