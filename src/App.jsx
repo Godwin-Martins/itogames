@@ -4,7 +4,10 @@ import './App.css';
 import Header from './components/Header';
 import Highlights from './components/Highlights';
 import Feed from './components/Feed';
-import CommunityPage from './pages/CommunityPage'; // Corrected path to pages folder
+import CommunityPage from './pages/CommunityPage'; 
+import Auth from './pages/Auth';
+import Profile from './pages/Profile';
+import SearchResults from './pages/SearchResults';
 
 function App() {
   return (
@@ -63,6 +66,13 @@ function App() {
             
             {/* Sub-route for groups: /communities/groups */}
             <Route path="/communities/groups" element={<CommunityPage showGroupsDirectly={true} />} />
+
+            {/* Search Route */}
+            <Route path="/search" element={<SearchResults />} />
+
+            {/* Auth Routes */}
+            <Route path="/login" element={<Auth />} />
+            <Route path="/profile" element={<Profile />} />
 
             {/* Catch-all: Redirect invalid URLs back to Home */}
             <Route path="*" element={<Navigate to="/" />} />

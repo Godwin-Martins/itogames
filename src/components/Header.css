@@ -69,12 +69,28 @@
 .profile-btn {
     display: flex;
     align-items: center;
-    gap: 5px;
-    font-size: 1rem;
-    background: #21262d;
-    padding: 5px 12px;
+    gap: 8px;
+    border: 1px solid #00ff88;
+    color: #00ff88;
+    padding: 6px 15px;
     border-radius: 6px;
-    color: white;
+    font-size: 0.9rem;
+    font-weight: bold;
+    background: transparent;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.profile-btn:hover {
+    background: rgba(0, 255, 136, 0.1);
+}
+
+.profile-footer {
+    color: #00ff88 !important;
+}
+
+.profile-footer:hover {
+    color: #00ff88;
 }
 
 /* MOBILE FOOTER NAV STYLES */
