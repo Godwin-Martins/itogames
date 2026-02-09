@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { db, auth } from '../firebase';
 import { doc, getDoc, updateDoc, increment, arrayUnion, arrayRemove } from 'firebase/firestore';
 import { FaUserCircle, FaTrophy, FaImages, FaThList, FaUserPlus, FaEnvelope, FaCheck } from 'react-icons/fa';
@@ -8,6 +8,7 @@ import './Profile.css';
 
 const UserProfile = () => {
     const { id } = useParams();
+    const navigate = useNavigate();
     const [userData, setUserData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -153,7 +154,7 @@ const UserProfile = () => {
                             {isFollowing ? <><FaCheck /> Unfollow</> : <><FaUserPlus /> Follow</>}
                         </button>
                         
-                        <button className="message-btn" onClick={() => alert("Chat feature coming soon!")}>
+                        <button className="message-btn" onClick={() => navigate(`/messages/${id}`)}>
                             <FaEnvelope /> Message
                         </button>
                     </div>
