@@ -22,46 +22,57 @@ const SearchResults = () => {
     }, [searchParams]);
 
     const performSearch = async (query) => {
-    if (!query.trim()) {
-        setError('Please enter a search term');
-        return;
-    }
+        if (!query.trim()) {
+            setError('Please enter a search term');
+            return;
+        }
 
-    setLoading(true);
-    setError('');
-    setResults([]);
-    setSearched(true);
+        setLoading(true);
+        setError('');
+        setResults([]);
+        setSearched(true);
 
-    try {
-        console.log("Searching for:", query);
-        const usersRef = collection(db, 'users');
-        const querySnapshot = await getDocs(usersRef);
-        
-        const searchLower = query.toLowerCase().trim();
-        const filteredResults = [];
-
-        querySnapshot.forEach((doc) => {
-            const data = doc.data();
-            // Search by username OR full name
-            const username = data.username?.toLowerCase() || "";
-            const fullName = data.fullName?.toLowerCase() || "";
+        try {
+            console.log("Searching for:", query);
+            const usersRef = collection(db, 'users');
+            const querySnapshot = await getDocs(usersRef);
             
-            if (username.includes(searchLower) || fullName.includes(searchLower)) {
-                filteredResults.push({ id: doc.id, ...data });
-            }
-        });
+            const searchLower = query.toLowerCase().trim();
+            const userMap = new Map(); // Use Map to deduplicate by username
 
-        setResults(filteredResults);
-        console.log("Results found:", filteredResults.length);
+            querySnapshot.forEach((doc) => {
+                const data = doc.data();
+                // Search by username OR full name
+                const username = data.username?.toLowerCase() || "";
+                const fullName = data.fullName?.toLowerCase() || "";
+                
+                if (username && (username.includes(searchLower) || fullName.includes(searchLower))) {
+                    // If username already exists in map, replace it with the newest one
+                    if (userMap.has(username)) {
+                        const existing = userMap.get(username);
+                        // Keep the one with more complete data (has fullName and communities)
+                        const existingScore = (existing.fullName ? 1 : 0) + (existing.communities?.length || 0);
+                        const newScore = (data.fullName ? 1 : 0) + (data.communities?.length || 0);
+                        if (newScore > existingScore) {
+                            userMap.set(username, { id: doc.id, ...data });
+                        }
+                    } else {
+                        userMap.set(username, { id: doc.id, ...data });
+                    }
+                }
+            });
 
-    } catch (err) {
-        console.error("Search Error Detail:", err);
-        // This will now tell you if it's a Permission or Network error
-        setError(`Search failed: ${err.message}`); 
-    } finally {
-        setLoading(false);
-    }
-};
+            const filteredResults = Array.from(userMap.values());
+            setResults(filteredResults);
+            console.log("Results found:", filteredResults.length);
+
+        } catch (err) {
+            console.error("Search Error Detail:", err);
+            setError(`Search failed: ${err.message}`); 
+        } finally {
+            setLoading(false);
+        }
+    };
 
     const handleSearch = (e) => {
         e.preventDefault();
@@ -114,12 +125,16 @@ const SearchResults = () => {
                                 className="user-card"
                                 onClick={() => handleUserClick(user.id)}
                             >
-                                {user.photoURL && (
-                                    <img src={user.photoURL} alt={user.displayName} className="user-avatar" />
+                                {user.photoURL ? (
+                                    <img src={user.photoURL} alt={user.username} className="user-avatar" />
+                                ) : (
+                                    <div className="user-avatar-placeholder">
+                                        {user.username?.charAt(0).toUpperCase()}
+                                    </div>
                                 )}
                                 <div className="user-info">
                                     <h3 className="username">@{user.username}</h3>
-                                    <p className="display-name">{user.displayName}</p>
+                                    <p className="display-name">{user.fullName || user.displayName}</p>
                                     {user.communities && user.communities.length > 0 && (
                                         <div className="user-communities">
                                             {user.communities.slice(0, 2).map((game) => (
@@ -135,14 +150,16 @@ const SearchResults = () => {
                                         </div>
                                     )}
                                 </div>
-                                {user.followersCount && (
-                                    <div className="user-stats">
-                                        <p>{user.followersCount} Followers</p>
-                                    </div>
-                                )}
+                                <div className="user-stats">
+                                    <p>{user.followersCount || 0} Followers</p>
+                                </div>
                             </div>
                         ))}
                     </div>
+                )}
+
+                {!loading && searched && results.length === 0 && !error && (
+                    <div className="no-results">No users found matching "{searchQuery}"</div>
                 )}
 
                 {!loading && !searched && (

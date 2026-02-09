@@ -59,6 +59,28 @@
 .profile-names h1 { font-size: 1.6rem; margin: 0; }
 .username { color: #8b949e; margin: 4px 0; }
 
+.profile-edit-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.profile-edit-fields input {
+    background: #0d1117;
+    border: 1px solid var(--border-color);
+    color: #f0f6fc;
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    width: 220px;
+}
+
+.profile-edit-fields input:focus {
+    outline: none;
+    border-color: var(--neon-accent);
+    box-shadow: 0 0 0 2px rgba(0, 255, 136, 0.15);
+}
+
 .game-tag {
     background: rgba(0, 255, 136, 0.1);
     color: var(--neon-accent);
@@ -134,6 +156,17 @@
     background: var(--border-color);
 }
 
+.edit-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+.edit-actions .edit-profile-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
 /* Tabs */
 .profile-tabs {
     display: flex;
@@ -174,10 +207,52 @@
 
 .profile-status-screen.error { color: #ff4444; }
 
+.profile-edit-extras {
+    margin-top: 20px;
+    background: var(--surface-dark);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.profile-edit-row {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.profile-edit-row label {
+    color: #8b949e;
+    font-size: 0.85rem;
+}
+
+.profile-edit-row input,
+.profile-edit-row textarea {
+    background: #0d1117;
+    border: 1px solid var(--border-color);
+    color: #f0f6fc;
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    resize: vertical;
+}
+
+.profile-edit-row input:focus,
+.profile-edit-row textarea:focus {
+    outline: none;
+    border-color: var(--neon-accent);
+    box-shadow: 0 0 0 2px rgba(0, 255, 136, 0.15);
+}
+
 @media (max-width: 600px) {
     .profile-header { flex-direction: column; text-align: center; }
     .profile-info-main { flex-direction: column; }
     .profile-stats { text-align: center; width: 100%; }
+    .profile-edit-fields input { width: 100%; }
+    .edit-actions { justify-content: center; }
 }
 
 .profile-actions {

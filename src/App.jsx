@@ -10,6 +10,7 @@ import Profile from './pages/Profile';
 import SearchResults from './pages/SearchResults';
 import UserProfile from './pages/UserProfile';
 import Message from './pages/Message';
+import Notifications from './pages/Notifications';
 
 function App() {
   return (
@@ -75,6 +76,9 @@ function App() {
             {/* Auth Routes */}
             <Route path="/login" element={<Auth />} />
             <Route path="/profile" element={<Profile />} />
+
+            {/* Notifications Route */}
+            <Route path="/notifications" element={<Notifications />} />
 
             {/* Public user profile route */}
             <Route path="/user/:id" element={<UserProfile />} />

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { db, auth } from '../firebase';
-import { doc, getDoc, updateDoc, increment } from 'firebase/firestore';
+import { doc, getDoc, updateDoc, increment, arrayUnion, arrayRemove } from 'firebase/firestore';
 import { FaUserCircle, FaTrophy, FaImages, FaThList, FaUserPlus, FaEnvelope, FaCheck } from 'react-icons/fa';
 import { getGameLogo } from '../utils/gameLogos';
 import './Profile.css';
@@ -36,6 +36,24 @@ const UserProfile = () => {
         if (id) fetchUser();
     }, [id]);
 
+    // Check if current user is already following this user
+    useEffect(() => {
+        if (!auth.currentUser || !id) return;
+
+        const checkFollowing = async () => {
+            try {
+                const currentUserRef = doc(db, 'users', auth.currentUser.uid);
+                const currentUserData = (await getDoc(currentUserRef)).data();
+                const following = currentUserData?.following || [];
+                setIsFollowing(following.includes(id));
+            } catch (err) {
+                console.error('Error checking follow status:', err);
+            }
+        };
+
+        checkFollowing();
+    }, [id]);
+
     const handleFollow = async () => {
         if (!auth.currentUser) return alert("Please sign in to follow gamers!");
         if (auth.currentUser.uid === id) return alert("You can't follow yourself!");
@@ -43,22 +61,47 @@ const UserProfile = () => {
         setFollowLoading(true);
         try {
             const userRef = doc(db, 'users', id);
+            const currentUserRef = doc(db, 'users', auth.currentUser.uid);
+            const currentUserSnap = await getDoc(currentUserRef);
+            const currentUserData = currentUserSnap.data();
             
-            if (!isFollowing) {
-                // Increment count in Firebase
-                await updateDoc(userRef, {
-                    followersCount: increment(1)
+            // Check the actual following list from the database to prevent duplicate follows
+            const followingList = currentUserData?.following || [];
+            const isActuallyFollowing = followingList.includes(id);
+
+            if (!isActuallyFollowing) {
+                // Follow the user
+                await updateDoc(currentUserRef, {
+                    following: arrayUnion(id)
                 });
+
+                await updateDoc(userRef, {
+                    followersCount: increment(1),
+                    notifications: arrayUnion({
+                        followerId: auth.currentUser.uid,
+                        followerName: currentUserData?.fullName || 'User',
+                        followerUsername: currentUserData?.username || 'user',
+                        followerPhoto: currentUserData?.photoURL || null,
+                        timestamp: new Date().toISOString(),
+                        isFollowed: false
+                    })
+                });
+
                 // Update local UI
                 setUserData(prev => ({ ...prev, followersCount: (prev.followersCount || 0) + 1 }));
                 setIsFollowing(true);
             } else {
-                // Decrement count in Firebase
+                // Unfollow the user
+                await updateDoc(currentUserRef, {
+                    following: arrayRemove(id)
+                });
+
                 await updateDoc(userRef, {
                     followersCount: increment(-1)
                 });
+
                 // Update local UI
-                setUserData(prev => ({ ...prev, followersCount: prev.followersCount - 1 }));
+                setUserData(prev => ({ ...prev, followersCount: Math.max(0, (prev.followersCount || 0) - 1) }));
                 setIsFollowing(false);
             }
         } catch (err) {
@@ -107,7 +150,7 @@ const UserProfile = () => {
                             onClick={handleFollow}
                             disabled={followLoading}
                         >
-                            {isFollowing ? <><FaCheck /> Following</> : <><FaUserPlus /> Follow</>}
+                            {isFollowing ? <><FaCheck /> Unfollow</> : <><FaUserPlus /> Follow</>}
                         </button>
                         
                         <button className="message-btn" onClick={() => alert("Chat feature coming soon!")}>

@@ -63,9 +63,34 @@
     font-size: 1.3rem;
     cursor: pointer;
     transition: 0.3s;
+    position: relative;
 }
 
 .nav-item:hover { color: #00ff88; }
+
+.notification-btn {
+    position: relative;
+}
+
+.notification-badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: #ff4444;
+    color: white;
+    font-size: 0.65rem;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 10px;
+    min-width: 20px;
+    text-align: center;
+    animation: badge-pulse 0.6s ease-in-out infinite;
+}
+
+@keyframes badge-pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
 
 .login-btn {
     border: 1px solid #00ff88;
@@ -139,7 +164,88 @@
 .sign-in-special { color: #58a6ff; }
 
 .mobile-search-trigger { display: none; color: #8b949e; font-size: 1.2rem; }
+/* MOBILE FOOTER NAV STYLES */
+.mobile-footer-nav {
+    display: none; /* Hidden on Desktop */
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: #161b22;
+    border-top: 1px solid #30363d;
+    justify-content: space-around;
+    align-items: center;
+    padding: 8px 0;
+    z-index: 2000;
+}
 
+.footer-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #8b949e;
+    text-decoration: none;
+    font-size: 1.2rem;
+    gap: 4px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s;
+    position: relative;
+    padding: 8px 0;
+}
+
+.footer-item span {
+    font-size: 0.65rem;
+    font-weight: 500;
+}
+
+.footer-item:hover {
+    color: #00ff88;
+}
+
+.footer-item.active { 
+    color: #00ff88; 
+}
+
+.notification-footer {
+    background: none;
+    border: none;
+    color: #8b949e;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: 0.3s;
+    position: relative;
+}
+
+.notification-footer:hover {
+    color: #00ff88;
+}
+
+.notification-badge-mobile {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: #ff4444;
+    color: white;
+    font-size: 0.55rem;
+    font-weight: 700;
+    padding: 2px 5px;
+    border-radius: 10px;
+    min-width: 16px;
+    text-align: center;
+    animation: badge-pulse 0.6s ease-in-out infinite;
+}
+
+.sign-in-special { 
+    color: #58a6ff; 
+}
+
+.sign-in-special:hover {
+    color: #79c0ff;
+}
+
+.mobile-search-trigger { display: none; color: #8b949e; font-size: 1.2rem; }
 /* MEDIA QUERIES */
 @media (max-width: 768px) {
     .search-bar, .desktop-nav { display: none; }

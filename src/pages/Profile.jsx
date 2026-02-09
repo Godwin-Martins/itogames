@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { auth, db } from '../firebase';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { onAuthStateChanged } from 'firebase/auth';
 import { FaUserCircle, FaTrophy, FaImages, FaThList } from 'react-icons/fa';
 import { getGameLogo } from '../utils/gameLogos';
@@ -11,6 +11,15 @@ const Profile = () => {
     const [activeTab, setActiveTab] = useState('posts');
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [isEditing, setIsEditing] = useState(false);
+    const [formData, setFormData] = useState({
+        fullName: '',
+        username: '',
+        gameTag: '',
+        bio: '',
+        photoURL: '',
+    });
+    const [saveState, setSaveState] = useState({ saving: false, error: null, success: false });
 
     useEffect(() => {
         // Essential: Use onAuthStateChanged to wait for Firebase to initialize the user
@@ -21,7 +30,15 @@ const Profile = () => {
                     const docSnap = await getDoc(docRef);
                     
                     if (docSnap.exists()) {
-                        setUserData(docSnap.data());
+                        const data = docSnap.data();
+                        setUserData(data);
+                        setFormData({
+                            fullName: data.fullName || '',
+                            username: data.username || '',
+                            gameTag: data.gameTag || '',
+                            bio: data.bio || '',
+                            photoURL: data.photoURL || '',
+                        });
                     } else {
                         setError("User profile data not found in database.");
                     }
@@ -43,6 +60,43 @@ const Profile = () => {
     if (loading) return <div className="profile-status-screen">Loading Gamer Profile...</div>;
     if (error) return <div className="profile-status-screen error">{error}</div>;
 
+    const handleEditToggle = () => {
+        setSaveState({ saving: false, error: null, success: false });
+        setIsEditing((prev) => !prev);
+    };
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData((prev) => ({ ...prev, [name]: value }));
+    };
+
+    const handleSave = async () => {
+        if (!auth.currentUser) {
+            setSaveState({ saving: false, error: 'No authenticated user found.', success: false });
+            return;
+        }
+
+        setSaveState({ saving: true, error: null, success: false });
+        try {
+            const docRef = doc(db, "users", auth.currentUser.uid);
+            const payload = {
+                fullName: formData.fullName.trim(),
+                username: formData.username.trim(),
+                gameTag: formData.gameTag.trim(),
+                bio: formData.bio.trim(),
+                photoURL: formData.photoURL.trim(),
+            };
+
+            await updateDoc(docRef, payload);
+            setUserData((prev) => ({ ...prev, ...payload }));
+            setIsEditing(false);
+            setSaveState({ saving: false, error: null, success: true });
+        } catch (err) {
+            console.error("Update error:", err);
+            setSaveState({ saving: false, error: 'Failed to update profile.', success: false });
+        }
+    };
+
     return (
         <div className="profile-container">
             <div className="profile-header">
@@ -62,9 +116,37 @@ const Profile = () => {
                         <button className="edit-pic-btn">+</button>
                     </div>
                     <div className="profile-names">
-                        <h1>{userData.fullName}</h1>
-                        <p className="username">@{userData.username}</p>
-                        <span className="game-tag">{userData.gameTag || "New Player"}</span>
+                        {isEditing ? (
+                            <div className="profile-edit-fields">
+                                <input
+                                    type="text"
+                                    name="fullName"
+                                    value={formData.fullName}
+                                    onChange={handleChange}
+                                    placeholder="Full name"
+                                />
+                                <input
+                                    type="text"
+                                    name="username"
+                                    value={formData.username}
+                                    onChange={handleChange}
+                                    placeholder="Username"
+                                />
+                                <input
+                                    type="text"
+                                    name="gameTag"
+                                    value={formData.gameTag}
+                                    onChange={handleChange}
+                                    placeholder="Game tag"
+                                />
+                            </div>
+                        ) : (
+                            <>
+                                <h1>{userData.fullName}</h1>
+                                <p className="username">@{userData.username}</p>
+                                <span className="game-tag">{userData.gameTag || "New Player"}</span>
+                            </>
+                        )}
                     </div>
                 </div>
 
@@ -73,9 +155,55 @@ const Profile = () => {
                         <span className="stat-value">{userData.followersCount || 0}</span>
                         <span className="stat-label">Followers</span>
                     </div>
-                    <button className="edit-profile-btn">Edit Profile</button>
+                    {isEditing ? (
+                        <div className="edit-actions">
+                            <button
+                                className="edit-profile-btn"
+                                onClick={handleSave}
+                                disabled={saveState.saving}
+                            >
+                                {saveState.saving ? 'Saving...' : 'Save'}
+                            </button>
+                            <button className="edit-profile-btn" onClick={handleEditToggle}>
+                                Cancel
+                            </button>
+                        </div>
+                    ) : (
+                        <button className="edit-profile-btn" onClick={handleEditToggle}>
+                            Edit Profile
+                        </button>
+                    )}
                 </div>
             </div>
+
+            {isEditing && (
+                <div className="profile-edit-extras">
+                    <div className="profile-edit-row">
+                        <label htmlFor="bio">Bio</label>
+                        <textarea
+                            id="bio"
+                            name="bio"
+                            value={formData.bio}
+                            onChange={handleChange}
+                            placeholder="Tell people about your playstyle..."
+                            rows={3}
+                        />
+                    </div>
+                    <div className="profile-edit-row">
+                        <label htmlFor="photoURL">Photo URL</label>
+                        <input
+                            id="photoURL"
+                            type="text"
+                            name="photoURL"
+                            value={formData.photoURL}
+                            onChange={handleChange}
+                            placeholder="https://..."
+                        />
+                    </div>
+                    {saveState.error && <div className="profile-status-screen error">{saveState.error}</div>}
+                    {saveState.success && <div className="profile-status-screen">Profile updated.</div>}
+                </div>
+            )}
 
             {/* Communities Section */}
             {userData.communities && (
