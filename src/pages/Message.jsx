@@ -1,246 +1,269 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { HiMenuAlt3 } from 'react-icons/hi';
-import { IoClose, IoSearch, IoSend } from 'react-icons/io5';
-import { BsThreeDotsVertical, BsCheckAll, BsPlus } from 'react-icons/bs';
-import { MdVideoCall } from 'react-icons/md';
-import { GrEmoji } from 'react-icons/gr';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Plus, MessageCircle, Trash2, Clock, Send } from 'lucide-react';
 import './Message.css';
 
 const Message = () => {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [message, setMessage] = useState('');
-  const sidebarRef = useRef(null);
+  const [chats, setChats] = useState([]);
+  const [activeChat, setActiveChat] = useState(null);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [inputMessage, setInputMessage] = useState('');
+  const messagesEndRef = useRef(null);
 
-  // Close sidebar when clicking outside
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (isSidebarOpen && sidebarRef.current && !sidebarRef.current.contains(event.target)) {
-        setIsSidebarOpen(false);
-      }
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [activeChat]);
+
+  const createNewChat = () => {
+    const newChat = {
+      id: Date.now().toString(),
+      title: 'New Chat',
+      messages: [],
+      createdAt: new Date().toISOString()
     };
+    setChats(prev => [newChat, ...prev]);
+    setActiveChat(newChat.id);
+  };
 
-    if (isSidebarOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
-    }
+  const updateChatMessages = (chatId, messages) => {
+    setChats(prev => prev.map(chat => 
+      chat.id === chatId ? { ...chat, messages } : chat
+    ));
+  };
 
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [isSidebarOpen]);
-
-  // Prevent body scroll when sidebar is open
-  useEffect(() => {
-    if (isSidebarOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-    }
-  }, [isSidebarOpen]);
-
-  const chats = [
-    {
-      id: 1,
-      name: 'Fortune Huntsville',
-      avatar: '👤',
-      lastMessage: 'Cartoon keh Which one be dragon ball',
-      time: '10:03',
-      unread: 0
-    },
-    {
-      id: 2,
-      name: 'David (Doctor Strange)',
-      avatar: '🧙',
-      lastMessage: 'Ok',
-      time: '09:08',
-      unread: 0,
-      active: true
-    },
-    {
-      id: 3,
-      name: 'Divine-Favour💕',
-      avatar: '👤',
-      lastMessage: 'Okay',
-      time: '09:04',
-      unread: 0
-    },
-    {
-      id: 4,
-      name: 'Temlio',
-      avatar: '👥',
-      lastMessage: 'Comlio Product',
-      time: '08:50',
-      unread: 0
-    },
-    {
-      id: 5,
-      name: 'TPG',
-      avatar: '👤',
-      lastMessage: 'THE PLUTO GAMERS💀👻🍆',
-      time: '08:47',
-      unread: 219
-    }
-  ];
-
-  const messages = [
-    {
-      id: 1,
-      sender: 'you',
-      text: 'No',
-      time: '09:04'
-    },
-    {
-      id: 2,
-      sender: 'other',
-      text: 'The guy they kicked in the video\nThen he asked who kick me',
-      time: '09:04'
-    },
-    {
-      id: 3,
-      sender: 'you',
-      text: 'Oh',
-      time: '09:05',
-      read: true
-    },
-    {
-      id: 4,
-      sender: 'other',
-      text: 'Have u watched rush hour',
-      time: '09:05'
-    },
-    {
-      id: 5,
-      sender: 'you',
-      text: 'No',
-      time: '09:05',
-      read: true
-    },
-    {
-      id: 6,
-      sender: 'you',
-      text: 'Ok',
-      time: '09:08'
-    }
-  ];
-
-  const handleSendMessage = () => {
-    if (message.trim()) {
-      // Handle send message logic here
-      console.log('Sending message:', message);
-      setMessage('');
+  const deleteChat = (chatId) => {
+    setChats(prev => prev.filter(chat => chat.id !== chatId));
+    if (activeChat === chatId) {
+      setActiveChat(chats.length > 1 ? chats.find(chat => chat.id !== chatId)?.id : null);
     }
   };
 
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffTime = Math.abs(now - date);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+    if (diffDays === 1) return 'Today';
+    if (diffDays === 2) return 'Yesterday';
+    if (diffDays <= 7) return `${diffDays - 1} days ago`;
+    return date.toLocaleDateString();
+  };
+
+  const handleSendMessage = () => {
+    if (!inputMessage.trim()) return;
+
+    const currentChat = chats.find(chat => chat.id === activeChat);
+    if (!currentChat) return;
+
+    const userMessage = {
+      id: Date.now().toString(),
+      sender: 'user',
+      text: inputMessage.trim(),
+      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+    };
+
+    const updatedMessages = [...currentChat.messages, userMessage];
+    updateChatMessages(activeChat, updatedMessages);
+    setInputMessage('');
+
+    // Simulate AI response
+    setTimeout(() => {
+      const aiMessage = {
+        id: (Date.now() + 1).toString(),
+        sender: 'ai',
+        text: 'Thanks for your message. How can I help you?',
+        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      };
+      updateChatMessages(activeChat, [...updatedMessages, aiMessage]);
+    }, 500);
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSendMessage();
+    }
+  };
+
+  const currentChat = chats.find(chat => chat.id === activeChat);
+
   return (
-    <div className="message-container">
-      {/* Overlay for mobile sidebar */}
-      {isSidebarOpen && <div className="sidebar-overlay" onClick={() => setIsSidebarOpen(false)} />}
+    <div className="message-app">
+      <header className="message-header">
+        <button 
+          className="sidebar-toggle"
+          onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+        >
+          ☰
+        </button>
+        <h1 className="message-title">Messages</h1>
+        <div className="header-spacer"></div>
+      </header>
 
-      {/* Sidebar */}
-      <aside ref={sidebarRef} className={`sidebar ${isSidebarOpen ? 'sidebar-open' : ''}`}>
-        <div className="sidebar-header">
-          <h2>Chats</h2>
-          <div className="sidebar-header-actions">
-            <button className="icon-btn">
-              <BsPlus size={24} />
-            </button>
-            <button className="icon-btn">
-              <BsThreeDotsVertical size={20} />
-            </button>
-            <button className="icon-btn close-sidebar-btn" onClick={() => setIsSidebarOpen(false)}>
-              <IoClose size={24} />
-            </button>
-          </div>
-        </div>
+      <div className="message-main-content">
+        <AnimatePresence>
+          {isSidebarOpen && (
+            <motion.div
+              key="sidebar"
+              initial={{ x: -250, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              exit={{ x: -250, opacity: 0 }}
+              transition={{ type: 'spring', stiffness: 80 }}
+            >
+              <aside className="message-sidebar">
+                <motion.button
+                  className="new-chat-btn"
+                  onClick={createNewChat}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <Plus size={20} />
+                  New Chat
+                </motion.button>
 
-        <div className="search-box">
-          <IoSearch className="search-icon" />
-          <input type="text" placeholder="Search or start a new chat" />
-        </div>
-
-        <div className="chat-tabs">
-          <button className="chat-tab active">All</button>
-          <button className="chat-tab">Unread</button>
-          <button className="chat-tab">Favourites</button>
-          <button className="chat-tab">Groups</button>
-        </div>
-
-        <div className="chat-list">
-          {chats.map((chat) => (
-            <div key={chat.id} className={`chat-item ${chat.active ? 'active' : ''}`}>
-              <div className="chat-avatar">{chat.avatar}</div>
-              <div className="chat-info">
-                <div className="chat-header">
-                  <h4>{chat.name}</h4>
-                  <span className="chat-time">{chat.time}</span>
+                <div className="recent-chats">
+                  <h3>
+                    <Clock size={16} />
+                    Recent Chats
+                  </h3>
+                  
+                  {chats.length === 0 ? (
+                    <p className="no-chats">No recent chats</p>
+                  ) : (
+                    <div className="chat-list">
+                      {chats.map((chat, index) => (
+                        <motion.div
+                          key={chat.id}
+                          className={`chat-item ${activeChat === chat.id ? 'active' : ''}`}
+                          onClick={() => setActiveChat(chat.id)}
+                          initial={{ opacity: 0, x: -20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: index * 0.05 }}
+                          whileHover={{ scale: 1.02 }}
+                        >
+                          <MessageCircle size={16} />
+                          <span className="chat-title">
+                            {chat.title || 'New Chat'}
+                          </span>
+                          <span className="chat-date">
+                            {formatDate(chat.createdAt)}
+                          </span>
+                          <motion.button
+                            className="delete-chat-btn"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              deleteChat(chat.id);
+                            }}
+                            whileHover={{ scale: 1.2 }}
+                          >
+                            <Trash2 size={14} />
+                          </motion.button>
+                        </motion.div>
+                      ))}
+                    </div>
+                  )}
                 </div>
-                <p className="chat-message">{chat.lastMessage}</p>
-              </div>
-              {chat.unread > 0 && <span className="unread-badge">{chat.unread}</span>}
+              </aside>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        <motion.div
+          key={activeChat}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.3 }}
+          className="chat-area-wrapper"
+        >
+          {!currentChat ? (
+            <div className="message-chat-area empty">
+              <motion.div 
+                className="empty-state"
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.4 }}
+              >
+                <MessageCircle size={64} className="empty-icon" />
+                <h2>Messages</h2>
+                <p>Start a new conversation</p>
+                <motion.button 
+                  className="start-chat-btn" 
+                  onClick={createNewChat}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <Plus size={20} />
+                  Start New Chat
+                </motion.button>
+              </motion.div>
             </div>
-          ))}
-        </div>
-      </aside>
+          ) : (
+            <div className="message-chat-area">
+              <div className="messages-container">
+                <AnimatePresence>
+                  {currentChat.messages.length === 0 ? (
+                    <motion.div 
+                      key="empty-chat"
+                      className="empty-chat"
+                      initial={{ opacity: 0, y: 15 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0 }}
+                    >
+                      <MessageCircle size={48} />
+                      <h3>How can I help you today?</h3>
+                    </motion.div>
+                  ) : (
+                    currentChat.messages.map(msg => (
+                      <motion.div
+                        key={msg.id}
+                        className={`message ${msg.sender === 'user' ? 'user-message' : 'ai-message'}`}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.3 }}
+                      >
+                        <div className="message-avatar">
+                          <span>{msg.sender === 'user' ? '👤' : '🤖'}</span>
+                        </div>
+                        <div className="message-content">
+                          <div className="message-text">
+                            <p>{msg.text}</p>
+                          </div>
+                          <div className="message-time">{msg.time}</div>
+                        </div>
+                      </motion.div>
+                    ))
+                  )}
+                </AnimatePresence>
+                <div ref={messagesEndRef} />
+              </div>
 
-      {/* Main Chat Area */}
-      <main className="chat-main">
-        {/* Sticky Header */}
-        <header className="chat-header">
-          <button className="menu-btn" onClick={() => setIsSidebarOpen(true)}>
-            <HiMenuAlt3 size={24} />
-          </button>
-          <div className="header-user-info">
-            <div className="header-avatar">🧙</div>
-            <h3>David (Doctor Strange)</h3>
-          </div>
-          <div className="header-actions">
-            <button className="icon-btn">
-              <MdVideoCall size={24} />
-            </button>
-            <button className="icon-btn">
-              <IoSearch size={20} />
-            </button>
-            <button className="icon-btn">
-              <BsThreeDotsVertical size={20} />
-            </button>
-          </div>
-        </header>
-
-        {/* Messages Area */}
-        <div className="messages-area">
-          {messages.map((msg) => (
-            <div key={msg.id} className={`message ${msg.sender === 'you' ? 'message-sent' : 'message-received'}`}>
-              {msg.sender === 'other' && <div className="message-sender">David (Doctor Strange)</div>}
-              <div className="message-bubble">
-                <p>{msg.text}</p>
-                <div className="message-meta">
-                  <span className="message-time">{msg.time}</span>
-                  {msg.sender === 'you' && msg.read && <BsCheckAll className="read-receipt" />}
+              <div className="input-container">
+                <div className="input-wrapper">
+                  <textarea
+                    value={inputMessage}
+                    onChange={(e) => setInputMessage(e.target.value)}
+                    onKeyPress={handleKeyPress}
+                    placeholder="Type your message..."
+                    rows={1}
+                  />
+                  
+                  <motion.button 
+                    onClick={handleSendMessage}
+                    disabled={!inputMessage.trim()}
+                    className="send-button"
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
+                  >
+                    <Send size={20} />
+                  </motion.button>
                 </div>
               </div>
             </div>
-          ))}
-        </div>
-
-        {/* Fixed Message Input */}
-        <div className="message-input-container">
-          <button className="icon-btn">
-            <BsPlus size={28} />
-          </button>
-          <button className="icon-btn">
-            <GrEmoji size={20} />
-          </button>
-          <input
-            type="text"
-            placeholder="Type a message"
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
-          />
-          <button className="icon-btn send-btn" onClick={handleSendMessage}>
-            <IoSend size={20} />
-          </button>
-        </div>
-      </main>
+          )}
+        </motion.div>
+      </div>
     </div>
   );
 };
