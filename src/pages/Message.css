@@ -43,8 +43,6 @@ body {
   font-family: 'Google Sans', Roboto, 'Fira Code', Arial, sans-serif;
   background-color: var(--color-background-main);
   color: var(--color-text-dark);
-  height: 100vh;
-  overflow: hidden;
   transition: background-color 0.3s, color 0.3s;
 }
 
@@ -52,6 +50,7 @@ body {
   display: flex;
   flex-direction: column;
   height: 100vh;
+  overflow: hidden;
 }
 
 .message-header {
@@ -112,7 +111,6 @@ body.dark-mode .message-title {
 .message-main-content {
   display: flex;
   flex: 1;
-  overflow: hidden;
 }
 
 .message-sidebar {

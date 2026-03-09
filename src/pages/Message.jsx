@@ -95,7 +95,7 @@ const Message = () => {
           className="sidebar-toggle"
           onClick={() => setIsSidebarOpen(!isSidebarOpen)}
         >
-          ☰
+          {isSidebarOpen ? '✕' : '☰'}
         </button>
         <h1 className="message-title">Messages</h1>
         <div className="header-spacer"></div>
@@ -111,7 +111,7 @@ const Message = () => {
               exit={{ x: -250, opacity: 0 }}
               transition={{ type: 'spring', stiffness: 80 }}
             >
-              <aside className="message-sidebar">
+              <aside className="message-sidebar" onClick={(e) => e.stopPropagation()}>
                 <motion.button
                   className="new-chat-btn"
                   onClick={createNewChat}
@@ -176,6 +176,7 @@ const Message = () => {
           exit={{ opacity: 0 }}
           transition={{ duration: 0.3 }}
           className="chat-area-wrapper"
+          onClick={() => setIsSidebarOpen(false)}
         >
           {!currentChat ? (
             <div className="message-chat-area empty">
