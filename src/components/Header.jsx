@@ -120,9 +120,20 @@ const Header = () => {
                         )}
                     </nav>
 
-                    {/* Restored Mobile Search Icon (Top Right) */}
-                    <div className="mobile-search-trigger" onClick={handleMobileSearchClick}>
-                        <FaSearch />
+                    {/* Mobile Notification & Search Icons (Top Right) */}
+                    <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                        <button className="mobile-notification-btn" onClick={() => {
+                            if (!auth.currentUser) return navigate('/login');
+                            navigate('/notifications');
+                        }}>
+                            <FaBell />
+                            {notificationCount > 0 && (
+                                <span className="notification-badge">{notificationCount}</span>
+                            )}
+                        </button>
+                        <div className="mobile-search-trigger" onClick={handleMobileSearchClick}>
+                            <FaSearch />
+                        </div>
                     </div>
                 </div>
             </header>
@@ -141,17 +152,7 @@ const Header = () => {
                     if (!auth.currentUser) return navigate('/login');
                     navigate('/messages');
                 }}><FaEnvelope /><span>Chat</span></div>
-                    <button className="footer-item notification-footer" onClick={() => {
-                        if (!auth.currentUser) return navigate('/login');
-                        navigate('/notifications');
-                    }}>
-                        <FaBell />
-                        {notificationCount > 0 && (
-                            <span className="notification-badge-mobile">{notificationCount}</span>
-                        )}
-                        <span>Inbox</span>
-                    </button>
-                    <div className="footer-item"><FaTrophy /><span>Tours</span></div>
+                <div className="footer-item"><FaTrophy /><span>Tours</span></div>
                 {!loading && (
                     user ? (
                         <button onClick={handleProfileClick} className="footer-item profile-footer">

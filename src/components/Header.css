@@ -164,6 +164,10 @@
 .sign-in-special { color: #58a6ff; }
 
 .mobile-search-trigger { display: none; color: #8b949e; font-size: 1.2rem; }
+
+.mobile-notification-btn { display: none; background: none; border: none; color: #8b949e; font-size: 1.2rem; cursor: pointer; transition: 0.3s; position: relative; }
+.mobile-notification-btn:hover { color: #00ff88; }
+
 /* MOBILE FOOTER NAV STYLES */
 .mobile-footer-nav {
     display: none; /* Hidden on Desktop */
@@ -253,6 +257,8 @@
     .mobile-footer-nav { display: flex; }
 
     .mobile-search-trigger { display: block; }
+
+    .mobile-notification-btn { display: block; }
 
     /* Adjust main content so it doesn't get hidden behind the footer */
     body { padding-bottom: 70px; }
